@@ -11,12 +11,12 @@
 </template>
 
 <script>
+  import { eventBus } from './main';
   import Inbox from './Inbox.vue';
   import Sent from './Sent.vue';
   import Important from './Important.vue';
   import Trash from './Trash.vue';
   import ViewMessage from './ViewMessage.vue';
-  import { eventBus } from './main';
 
   export default {
     props: {
@@ -24,17 +24,6 @@
         type: Array,
         required: true
       }
-    },
-    created(){
-      eventBus.$on('changeView', (data) => {
-        let temp = [{
-          tag: data.tag,
-          title: data.title,
-          data: data.data || {}
-        }];
-
-        this.history = temp.concat(this.history.splice(0))
-      });
     },
     data() {
       return {
@@ -49,10 +38,21 @@
         ]
       };
     },
+    created() {
+      eventBus.$on('changeView', (data) => {
+        let temp = [{
+          tag: data.tag,
+          title: data.title,
+          data: data.data || {}
+        }];
+
+        this.history = temp.concat(this.history.splice(0));
+      });
+    },
     computed: {
       currentView() {
         let current = this.history[0];
-        current.data.messages = this.message;
+        current.data.messages = this.messages;
         return current;
       },
       previousView() {

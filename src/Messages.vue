@@ -1,7 +1,7 @@
 <template>
   <table v-if="messages.length > 0" class="table table-inbox table-hover">
     <tbody>
-    <tr v-for="message in messages" @click="openMessage(message)" :class="{ unread: typeof message.isRead !== 'undefined' && !message.isRead }">
+    <tr v-for="message in messages" :class="{ unread: typeof message.isRead !== 'undefined' && !message.isRead }" @click="openMessage(message)">
       <td><input type="checkbox"></td>
       <td>
         <a href="#" v-if="typeof message.isImportant !== 'undefined'" @click.prevent.stop="message.isImportant = !message.isImportant">
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import {eventBus} from './main';
+  import { eventBus } from './main';
 
   export default {
     props: {
@@ -37,7 +37,7 @@
           data: {
             message: message
           }
-        })
+        });
       }
     }
   }

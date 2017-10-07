@@ -9,6 +9,10 @@
       </div>
     </div>
 
+    <div class="compose-wrapper">
+      <app-compose></app-compose>
+    </div>
+
     <ul class="inbox-nav">
       <li :class="{ active: activeView == 'app-inbox' }">
         <a href="#" @click.prevent="navigate('app-inbox', 'Inbox')">
@@ -18,19 +22,19 @@
 
       <li :class="{ active: activeView == 'app-sent' }">
         <a href="#" @click.prevent="navigate('app-sent', 'Sent')">
-          <i class="fa fa-envelope-o"></i>Sent <span class="label label-default pull-right">?</span>
+          <i class="fa fa-envelope-o"></i>Sent <span class="label label-default pull-right">{{ sentMessages.length }}</span>
         </a>
       </li>
 
       <li :class="{ active: activeView == 'app-important' }">
         <a href="#" @click.prevent="navigate('app-important', 'Important')">
-          <i class="fa fa-bookmark-o"></i>Important <span class="label label-warning pull-right">?</span>
+          <i class="fa fa-bookmark-o"></i>Important <span class="label label-warning pull-right">{{ importantMessages.length }}</span>
         </a>
       </li>
 
       <li :class="{ active: activeView == 'app-trash' }">
         <a href="#" @click.prevent="navigate('app-trash', 'Trash')">
-          <i class=" fa fa-trash-o"></i>Trash <span class="label label-default pull-right">?</span>
+          <i class=" fa fa-trash-o"></i>Trash <span class="label label-default pull-right">{{ trashedMessages.length }}</span>
         </a>
       </li>
     </ul>
@@ -39,6 +43,7 @@
 
 <script>
   import { eventBus } from './main';
+  import Compose from './Compose.vue';
 
   export default {
     props: {
@@ -47,22 +52,22 @@
         required: true
       }
     },
-    created() {
-      eventBus.$on('changeView', (data) => {
-        this.activeView = data.tag;
-      });
-    },
     data() {
       return {
         activeView: 'app-inbox'
       };
+    },
+    created() {
+      eventBus.$on('changeView', (data) => {
+        this.activeView = data.tag;
+      });
     },
     methods: {
       navigate(newView, title) {
         eventBus.$emit('changeView', {
           tag: newView,
           title: title
-        })
+        });
       }
     },
     computed: {
@@ -86,6 +91,9 @@
           return message.isDeleted === true;
         });
       }
+    },
+    components: {
+      appCompose: Compose
     }
   }
 </script>
